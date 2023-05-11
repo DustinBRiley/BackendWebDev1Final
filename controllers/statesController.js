@@ -200,7 +200,7 @@ const getStatePopulation = async (req, res) => {
         if(s === item.code) result = item
     })
     if(result == undefined) return res.status(400).json({ "message": "Invalid state abbreviation parameter" })
-    res.json({"state":result.state,"population":result.population})
+    res.json({"state":result.state,"population":result.population.toLocaleString()})
 }
 //done
 const getStateAdmission = async (req, res) => {
