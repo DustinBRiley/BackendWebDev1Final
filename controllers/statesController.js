@@ -45,48 +45,48 @@ const getAllStates = async (req, res) => {
 }
 //done
 const getState = async (req, res) => {
-    let result = []
+    let result = undefined
     const data = await fs.readFile(path.join(__dirname, '..', 'model', 'statesData.json'))
     let newData = JSON.parse(data)
     const s = req.params.state.toUpperCase()
     newData.forEach((item) => {
-        if(s === item.code) result.push(item)
+        if(s === item.code) result = item
     })
-    if(result == []) return res.status(400).json({ "message": "Invalid state abbreviation parameter." })
+    if(result == undefined) return res.status(400).json({ "message": "Invalid state abbreviation parameter" })
     const state = await State.findOne({ stateCode: s }).exec();
     if (!state) {
         res.json(result)
     }
     else {
-        result[0]['funfacts'] = state.funfacts
+        result['funfacts'] = state.funfacts
         res.json(result);
     }
 }
 //done
 const getStateFunfact = async (req, res) => {
-    let result = []
+    let result = undefined
     const data = await fs.readFile(path.join(__dirname, '..', 'model', 'statesData.json'))
     let newData = JSON.parse(data)
     const s = req.params.state.toUpperCase()
     newData.forEach((item) => {
-        if(s === item.code) result.push(item)
+        if(s === item.code) result = item
     })
-    if(result == []) return res.status(400).json({ "message": "Invalid state abbreviation parameter." })
+    if(result == undefined) return res.status(400).json({ "message": "Invalid state abbreviation parameter" })
     const state = await State.findOne({ stateCode: s }).exec();
-    if (!state) return res.status(404).json({ 'message': `No Fun Facts found for ${result[0]['state']}`})
+    if (!state) return res.status(404).json({ 'message': `No Fun Facts found for ${result['state']}`})
     const x = Math.floor(Math.random() * state.funfacts.length)
-    res.json(state.funfacts[x])
+    res.json({"funfact": state.funfacts[x]})
 }
 //done
 const createNewStateFunfact = async (req, res) => {
-    let result = []
+    let result = undefined
     const data = await fs.readFile(path.join(__dirname, '..', 'model', 'statesData.json'))
     let newData = JSON.parse(data)
     const s = req.params.state.toUpperCase()
     newData.forEach((item) => {
-        if(s === item.code) result.push(item)
+        if(s === item.code) result = item
     })
-    if(result == []) return res.status(400).json({ "message": "Invalid state abbreviation parameter." })
+    if(result == undefined) return res.status(400).json({ "message": "Invalid state abbreviation parameter" })
     if (!req?.body?.funfacts) return res.status(400).json({ "message": "State fun facts value required" })
     const state = await State.findOne({ stateCode: s }).exec();
     if (!state) {
@@ -114,20 +114,20 @@ const createNewStateFunfact = async (req, res) => {
 }
 //done
 const updateStateFunfact = async (req, res) => {
-    let result = []
+    let result = undefined
     const data = await fs.readFile(path.join(__dirname, '..', 'model', 'statesData.json'))
     let newData = JSON.parse(data)
     const s = req.params.state.toUpperCase()
     newData.forEach((item) => {
-        if(s === item.code) result.push(item)
+        if(s === item.code) result = item
     })
-    if(result == []) return res.status(400).json({ "message": "Invalid state abbreviation parameter." })
+    if(result == undefined) return res.status(400).json({ "message": "Invalid state abbreviation parameter" })
     if(!req?.body?.index) return res.status(400).json({ "message": "State fun fact index value required" })
     const index = req.body.index - 1
     if(!req?.body?.funfact) return res.status(400).json({ "message": "State fun fact value required" })
     const state = await State.findOne({ stateCode: s }).exec();
-    if(!state) return res.status(404).json({"message": `No Fun Facts found for ${result[0]['state']}`})
-    if(!state.funfacts[index]) return res.status(404).json({"message": `No Fun Fact found at that index for ${result[0]['state']}`})
+    if(!state) return res.status(404).json({"message": `No Fun Facts found for ${result['state']}`})
+    if(!state.funfacts[index]) return res.status(404).json({"message": `No Fun Fact found at that index for ${result['state']}`})
     try {
         await State.findOneAndUpdate(
             {_id: state._id},
@@ -141,19 +141,19 @@ const updateStateFunfact = async (req, res) => {
 }
 //done
 const deleteStateFunfact = async (req, res) => {
-    let result = []
+    let result = undefined
     const data = await fs.readFile(path.join(__dirname, '..', 'model', 'statesData.json'))
     let newData = JSON.parse(data)
     const s = req.params.state.toUpperCase()
     newData.forEach((item) => {
-        if(s === item.code) result.push(item)
+        if(s === item.code) result = item
     })
-    if(result == []) return res.status(400).json({ "message": "Invalid state abbreviation parameter." })
+    if(result == undefined) return res.status(400).json({ "message": "Invalid state abbreviation parameter" })
     if(!req?.body?.index) return res.status(400).json({ "message": "State fun fact index value required" })
     const index = req.body.index - 1
     const state = await State.findOne({ stateCode: s }).exec();
-    if(!state) return res.status(404).json({"message": `No Fun Facts found for ${result[0]['state']}`})
-    if(!state.funfacts[index]) return res.status(404).json({"message": `No Fun Fact found at that index for ${result[0]['state']}`})
+    if(!state) return res.status(404).json({"message": `No Fun Facts found for ${result['state']}`})
+    if(!state.funfacts[index]) return res.status(404).json({"message": `No Fun Fact found at that index for ${result['state']}`})
     state.funfacts.splice(index, 1)
     try {
         await State.updateOne(
@@ -168,51 +168,51 @@ const deleteStateFunfact = async (req, res) => {
 }
 //done
 const getStateCapital = async (req, res) => {
-    let result = []
+    let result = undefined
     const data = await fs.readFile(path.join(__dirname, '..', 'model', 'statesData.json'))
     let newData = JSON.parse(data)
     const s = req.params.state.toUpperCase()
     newData.forEach((item) => {
-        if(s === item.code) result.push(item)
+        if(s === item.code) result = item
     })
-    if(result == []) return res.status(400).json({ "message": "Invalid state abbreviation parameter." })
-    res.json({"state":result[0].state,"capital":result[0].capital_city})
+    if(result == undefined) return res.status(400).json({ "message": "Invalid state abbreviation parameter" })
+    res.json({"state":result.state,"capital":result.capital_city})
 }
 //done
 const getStateNickname = async (req, res) => {
-    let result = []
+    let result = undefined
     const data = await fs.readFile(path.join(__dirname, '..', 'model', 'statesData.json'))
     let newData = JSON.parse(data)
     const s = req.params.state.toUpperCase()
     newData.forEach((item) => {
-        if(s === item.code) result.push(item)
+        if(s === item.code) result = item
     })
-    if(result == []) return res.status(400).json({ "message": "Invalid state abbreviation parameter." })
-    res.json({"state":result[0].state,"nickname":result[0].nickname})
+    if(result == undefined) return res.status(400).json({ "message": "Invalid state abbreviation parameter" })
+    res.json({"state":result.state,"nickname":result.nickname})
 }
 //done
 const getStatePopulation = async (req, res) => {
-    let result = []
+    let result = undefined
     const data = await fs.readFile(path.join(__dirname, '..', 'model', 'statesData.json'))
     let newData = JSON.parse(data)
     const s = req.params.state.toUpperCase()
     newData.forEach((item) => {
-        if(s === item.code) result.push(item)
+        if(s === item.code) result = item
     })
-    if(result == []) return res.status(400).json({ "message": "Invalid state abbreviation parameter." })
-    res.json({"state":result[0].state,"population":result[0].population})
+    if(result == undefined) return res.status(400).json({ "message": "Invalid state abbreviation parameter" })
+    res.json({"state":result.state,"population":result.population})
 }
 //done
 const getStateAdmission = async (req, res) => {
-    let result = []
+    let result = undefined
     const data = await fs.readFile(path.join(__dirname, '..', 'model', 'statesData.json'))
     let newData = JSON.parse(data)
     const s = req.params.state.toUpperCase()
     newData.forEach((item) => {
-        if(s === item.code) result.push(item)
+        if(s === item.code) result = item
     })
-    if(result == []) return res.status(400).json({ "message": "Invalid state abbreviation parameter." })
-    res.json({"state":result[0].state,"admitted":result[0].admission_date})
+    if(result == undefined) return res.status(400).json({ "message": "Invalid state abbreviation parameter" })
+    res.json({"state":result.state,"admitted":result.admission_date})
 }
 
 module.exports = {
