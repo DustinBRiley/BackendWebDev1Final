@@ -1,5 +1,3 @@
-#States API
-
 MVC style Node.js REST API using Express, Mongoose, and MongoDB
 
 Data also provided by JSON file
